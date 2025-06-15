@@ -4,29 +4,34 @@ use std::io;
 
 fn main() {
     let secret_number = rand::thread_rng().gen_range(1..=100);
-
     loop {
-        let mut guess = String::new();
-        println!("Enter your guess");
-        io::stdin().read_line(&mut guess).expect("Enter your guess");
-        println!("Your guess is :{guess}");
-        let guess: u32 = match guess.trim().parse() {
-            Ok(num) => num,
+        let mut guess_number = String::new();
+        println!("Enter a number from 1-100");
+        match io::stdin().read_line(&mut guess_number) {
             Err(err) => {
-                println!("error: {err}",);
+                println!("{err}");
+            }
+            Ok(_) => {
+                println!("You entered {guess_number}");
+            }
+        };
+        let guess_number: u32 = match guess_number.trim().parse() {
+            Ok(n) => n,
+            Err(err) => {
+                println!("{err}");
                 continue;
             }
         };
-        match guess.cmp(&secret_number) {
-            Ordering::Less => {
-                println!("The number is small");
-            }
+        match guess_number.cmp(&secret_number) {
             Ordering::Equal => {
-                println!("You winnnnn");
+                println!("Wow you got it right");
                 break;
             }
             Ordering::Greater => {
-                println!("The number is biggg")
+                println!("Hmmm a little too big");
+            }
+            Ordering::Less => {
+                println!("Hmmm a little too small");
             }
         }
     }
